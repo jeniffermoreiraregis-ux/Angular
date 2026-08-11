@@ -5,6 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class PrecoFormatadoPipe implements PipeTransform {
   transform(valor: number): string {
-    return 'R$' + valor.toFixed(2);
+    return 'R$ ' + valor.toFixed(2);
   }
 }

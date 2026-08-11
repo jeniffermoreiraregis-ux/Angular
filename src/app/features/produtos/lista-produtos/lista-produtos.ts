@@ -29,7 +29,7 @@ export class ListaProdutos {
     { nome: 'Mouse', preco: 179 },
   ]);
 
-  totalProdutos = computed(() => this.produtos().length); 
+  totalProdutos = computed(() => this.produtos().length);
 
   valorTotal = computed(() => {
     return this.produtos().reduce((total, item) => total + item.preco, 0);
@@ -48,15 +48,14 @@ export class ListaProdutos {
   }
 
   adicionarProduto() {
-    this.produtos.update((listaAtual) =>
-    [...listaAtual, { nome: 'Teclado', preco: 250 }])
+    this.produtos.update((listaAtual) => [...listaAtual, { nome: 'Teclado', preco: 250 }]);
   }
 
-    substituirProdutos() {
-      this.produtos.set([{ nome: 'Produtonovo', preco: 999 }]);
-    }
+  substituirProdutos() {
+    this.produtos.set([{ nome: 'Produtonovo', preco: 999 }]);
+  }
 
-    adicionarAoCarrinho(produto: { nome: string; preco: number }) {
-      this.carrinho.update((listaAtual) => [...listaAtual, produto]);
-    }
+  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
+    this.carrinho.update((listaAtual) => [...listaAtual, produto]);
+  }
 }
