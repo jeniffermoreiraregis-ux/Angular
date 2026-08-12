@@ -1,5 +1,6 @@
-import { Component, signal, computed, effect } from '@angular/core';
+import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
+import { ProdutosService } from '../produtos.service';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -8,7 +9,12 @@ import { Produto } from '../produto/produto';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
+  private produtoService = inject(ProdutosService);
+
   constructor() {
+
+    this.carregarProdutos();
+
     effect(() => {
       console.log('Lista de produtos alterada:', this.produtos());
     });
@@ -22,12 +28,27 @@ export class ListaProdutos {
     });
   }
 
+  carregarProdutos() {
+    this.carregando.set(true);
+    this.produtoService.buscarProdutos().subscribe({
+        next: (dados) => {
+          const produtos = this.produtoService.transformarProdutos
+          (dados);
+          this.produtos.set(produtos);
+          this.carregando.set(false);
+        },
+        error: (erro) => {
+          console.error('Erro ao carregar produtos:', erro);
+          this.carregando.set(false);
+        },
+      });
+  }
+
   produtoSelecionado = signal<string | null>(null);
 
-  produtos = signal([
-    { nome: 'Notebook', preco: 3800 },
-    { nome: 'Mouse', preco: 179 },
-  ]);
+  produtos = signal<{ nome: string; preco: number }[]>([]);
+
+  carregando = signal(true);
 
   totalProdutos = computed(() => this.produtos().length);
 

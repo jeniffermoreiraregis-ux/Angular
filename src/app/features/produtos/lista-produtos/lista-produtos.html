@@ -1,3 +1,22 @@
+<section>
+<h2>Produtos:</h2>
+
+@if (carregando()) {
+  <p>Carregando produtos...</p>
+}
+@if (!carregando()) {
+@for (item of produtos(); track item.nome) {
+  <app-produto
+    [nome]="item.nome"
+    [preco]="item.preco"
+    (produtoSelecionado)="exibirProduto($event)"
+  ></app-produto>
+
+  <button (click)="adicionarAoCarrinho(item)">
+    AdicionaraoCarrinho</button>
+  }
+}
+
 <h2>
   Produto selecionado:
   @if (produtoSelecionado()) {
