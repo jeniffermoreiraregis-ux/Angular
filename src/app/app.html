@@ -1,11 +1,4 @@
-<h1>Minha Loja</h1>
-<nav>
-  <a routerLink="/">Home</a> | 
-  <a routerLink="/produtos">Produtos</a> |
-  <a routerLink="/carrinho">Carrinho</a>
-</nav>
-<hr />
-<button (click)="login()">Login</button>
-<button (click)="logout()">logout</button>
-<p>Status: {{ usuarioLogado() ? 'Logado' : 'Desligado' }}</p>
-<router-outlet></router-outlet>
+<app-header></app-header>
+<main class="container-principal">
+  <router-outlet></router-outlet>
+</main>
