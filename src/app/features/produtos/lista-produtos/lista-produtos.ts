@@ -2,25 +2,24 @@ import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { ProdutosService } from '../../../core/services/produtos.service';
 import { MatButtonModule } from '@angular/material/button';
-import { CarrinhoService } from '../../../core/services/carrinho.service';
+import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, MatButtonModule ],
+  imports: [Produto, MatButtonModule],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
   private produtosService = inject(ProdutosService);
-  carrinhoService = inject(CarrinhoService);
-
-  quantidadeCarrinho = this.carrinhoService.quantidade;
-  totalCarrinho = this.carrinhoService.total;
+  carrinhoFacade = inject(CarrinhoFacade);
+  quantidadeCarrinho = this.carrinhoFacade.quantidade;
+  totalCarrinho = this.carrinhoFacade.total;
 
   erro = signal<string | null>(null);
 
   constructor() {
-    // carregada API
+    // carrega da API
     this.carregarProdutos();
 
     effect(() => {
@@ -47,8 +46,7 @@ export class ListaProdutos {
       },
       error: (erro) => {
         console.error('Erro ao carregar produtos:', erro);
-        this.erro.set
-        ('Erro ao carregar produtos. Verifique sua conexão e tente novamente.');
+        this.erro.set('Erro ao carregar produtos. Verifique sua conexão e tente novamente.');
         this.carregando.set(false);
       },
     });
@@ -79,6 +77,6 @@ export class ListaProdutos {
   }
 
   adicionarAoCarrinho(produto: { nome: string; preco: number }) {
-    this.carrinhoService.adicionar(produto);
+    this.carrinhoFacade.adicionarProduto(produto);
   }
 }
