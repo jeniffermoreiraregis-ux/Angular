@@ -11,31 +11,24 @@ import { AuthFacade } from '../../../core/facades/auth.facade';
 export class Admin {
   // A área administrativa passa a ler dados do usuário autenticado
   private authFacade = inject(AuthFacade);
-
   // Router usado para voltar para a área pública após logout
   private router = inject(Router);
-
   // Signals simulando indicadores administrativos do sistema.
   totalProdutosCadastrados = signal(20);
   pedidosPendentes = signal(3);
   usuariosCadastrados = signal(8);
-
   // Computed signal derivado do usuário atual.
   usuarioAtual = this.authFacade.usuarioAtual;
-
   // Texto calculado para reforçar o perfil atualmente autenticado
   mensagemPerfil = computed(() => {
     const usuario = this.usuarioAtual();
-
     if (!usuario) {
       return 'Nenhum usuário autenticado.';
     }
-
-    return `Usuário autenticado como ${usuario.perfil}.`;
+    return `Usuário autenticado como${usuario.perfil}.`;
   });
-
   sair() {
-    // Logout também pode ser feito a partir da área administrativa
+    // Logout também pode ser feito a partirda área administrativa
     this.authFacade.sair();
     this.router.navigateByUrl('/login');
   }

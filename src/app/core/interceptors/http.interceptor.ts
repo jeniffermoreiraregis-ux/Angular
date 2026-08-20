@@ -2,10 +2,10 @@ import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap, catchError, throwError } from 'rxjs';
-import { AuthFacade } from '../facades/auth.facade';
+import { AuthFacade} from '../facades/auth.facade';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
-  const authFacade = inject(AuthFacade);
+  const authFacade= inject(AuthFacade);
   // Router usa do redirecionamento sem erros de autenticação/autorização.
   const router = inject(Router);
   const token = authFacade.obterToken();

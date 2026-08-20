@@ -7,14 +7,13 @@ import { AuthService } from '../services/auth.service';
 
 export class AuthFacade {
   // A facade centraliza o acesso da aplicação à autenticação.
-  // Componentes, guards e header passam a usar esta camada simplificada.
+  // Componentes, guards e header passama usar esta camada simplificada.
   private authService = inject(AuthService);
   // Sinais de autenticação expostos para leitura.
   usuarioAtual = this.authService.usuarioAtual;
   estaLogado = this.authService.estaLogado;
   ehAdmin = this.authService.ehAdmin;
   token = this.authService.token;
-
   // Ação de alto nível para login.
   realizarLogin(email: string, senha: string): boolean {
     return this.authService.login(email, senha);

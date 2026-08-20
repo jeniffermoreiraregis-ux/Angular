@@ -11,15 +11,21 @@ import { AuthFacade } from '../../../core/facades/auth.facade';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
+
 export class Header {
+  // o Header deixa de acessar diretamente os services.
+  // Agora ele consome facades, que simplificam o acesso ao carrinho e à autenticação.
   private carrinhoFacade = inject(CarrinhoFacade);
   private authFacade = inject(AuthFacade);
   private router = inject(Router);
+  // Sinais recebidos da facade do carrinho.
   quantidade = this.carrinhoFacade.quantidade;
+  // Sinais recebidos da facade de autenticação.
   estaLogado = this.authFacade.estaLogado;
   usuarioAtual = this.authFacade.usuarioAtual;
-  
+
   sair() {
+    // Logout feito pela facade, não mais diretamente pelo service.
     this.authFacade.sair();
     this.router.navigateByUrl('/login');
   }

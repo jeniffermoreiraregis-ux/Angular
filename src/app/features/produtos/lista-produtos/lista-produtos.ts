@@ -3,31 +3,31 @@ import { Produto } from '../produto/produto';
 import { ProdutosService } from '../../../core/services/produtos.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
+import { ItemCarrinho } from '../../../core/models/item-carrinho';
+import { RouterLink } from '@angular/router';
+import { ProdutoLoja } from '../../../core/models/produto-loja';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, MatButtonModule],
+  imports: [Produto, MatButtonModule, RouterLink],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
   private produtosService = inject(ProdutosService);
   carrinhoFacade = inject(CarrinhoFacade);
-  quantidadeCarrinho = this.carrinhoFacade.quantidade;
-  totalCarrinho = this.carrinhoFacade.total;
-
+  produtos = signal<ProdutoLoja[]>([]);
+  produtoSelecionado = signal<string | null>(null);
+  carregando = signal(true);
   erro = signal<string | null>(null);
 
-  constructor() {
-    // carrega da API
-    this.carregarProdutos();
+  totalProdutos = computed(() => this.produtos().length);
+  valorTotal = computed(() => this.produtos().reduce((total, item) => total + item.preco, 0));
+  valorTotalFormatado = computed(() => this.valorTotal().toFixed(2));
 
-    effect(() => {
-      console.log('Lista de produtos alterada:', this.produtos());
-    });
-    effect(() => {
-      console.log('Valor total atualizado:', this.valorTotal());
-    });
+  constructor() {
+    this.carregarProdutos();
+    // Mantém apenas um efeito útil para a experiência do usuário.
     effect(() => {
       if (typeof document !== 'undefined') {
         document.title = `(${this.totalProdutos()}) Minha Loja`;
@@ -52,31 +52,11 @@ export class ListaProdutos {
     });
   }
 
-  produtoSelecionado = signal<string | null>(null);
-
-  produtos = signal<{ nome: string; preco: number }[]>([]);
-
-  carregando = signal(true);
-
-  totalProdutos = computed(() => this.produtos().length);
-
-  valorTotal = computed(() => {
-    return this.produtos().reduce((total, item) => total + item.preco, 0);
-  });
-
   exibirProduto(nome: string) {
     this.produtoSelecionado.set(nome);
   }
 
-  adicionarProduto() {
-    this.produtos.update((listaAtual) => [...listaAtual, { nome: 'Teclado', preco: 250 }]);
-  }
-
-  substituirProdutos() {
-    this.produtos.set([{ nome: 'Produtonovo', preco: 999 }]);
-  }
-
-  adicionarAoCarrinho(produto: { nome: string; preco: number }) {
+  adicionarAoCarrinho(produto: ItemCarrinho) {
     this.carrinhoFacade.adicionarProduto(produto);
   }
 }
